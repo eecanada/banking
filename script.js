@@ -61,6 +61,8 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+let movements = account1.movements;
+
 function dispayMovements(movements) {
   containerMovements.innerHTML = '';
   movements.forEach(function (mov, i) {
@@ -77,7 +79,7 @@ function dispayMovements(movements) {
   });
 }
 
-dispayMovements(account1.movements);
+dispayMovements(movements);
 
 function createUsernames(accs) {
   accs.forEach(function (acc) {
@@ -89,5 +91,37 @@ function createUsernames(accs) {
   });
 }
 
-createUsernames(accounts)
-console.log(accounts);
+createUsernames(accounts);
+
+function calcDisplayBalance(movements) {
+  const balance = movements.reduce((total, num) => {
+    return total + num;
+  });
+  labelBalance.textContent = `${balance}€`;
+}
+calcDisplayBalance(account1.movements);
+
+const deposits = movements.filter((mov) => {
+  return mov > 0;
+});
+
+const withdrawals = movements.filter((mov) => {
+  return mov < 0;
+});
+
+const balance = movements.reduce((total, num) => {
+  return total + num;
+});
+
+// Maximum value
+
+const max = movements.reduce((largestNum, num) => {
+  if (largestNum > num) {
+    largestNum = largestNum;
+  } else {
+    largestNum = num;
+  }
+  return largestNum;
+});
+
+console.log(max);
