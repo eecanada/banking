@@ -112,13 +112,10 @@ function createUsernames(accs) {
 
 createUsernames(accounts);
 
-function calcDisplayBalance(movements) {
-  const balance = movements.reduce((total, num) => {
-    return total + num;
-  });
-  labelBalance.textContent = `$${balance}`;
+function calcDisplayBalance(acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `$${acc.balance}`;
 }
-calcDisplayBalance(account1.movements);
 
 const deposits = movements.filter((mov) => {
   return mov > 0;
@@ -148,7 +145,7 @@ console.log(firstWithdrawal);
 const account = accounts.find((acc) => acc.owner === 'Jessica Davis');
 console.log(account);
 
-// Event Handler
+// Login Event Handler
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
@@ -165,14 +162,26 @@ btnLogin.addEventListener('click', function (e) {
     }`;
     // Display Movements
     containerApp.style.opacity = 100;
-    inputLoginUsername.value = inputLoginPin.value = ''
-    inputLoginPin.blur()
+    inputLoginUsername.value = inputLoginPin.value = '';
+    inputLoginPin.blur();
 
     // Display Balance
     displayMovements(currentAccount.movements);
     // Display Summary
-    calcDisplayBalance(currentAccount.movements);
+    calcDisplayBalance(currentAccount);
     // Display Summary
     calcDisplaySummary(currentAccount);
   }
+});
+
+// TransferEvent Handler
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const ammount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    (acc) => acc.username === inputTransferTo.value
+  );
+  console.log(ammount, receiverAcc, currentAccount);
 });
