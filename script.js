@@ -33,7 +33,7 @@ const account4 = {
   pin: 4444,
 };
 
-const accounts = [account1, account2, account3, account4];
+let accounts = [account1, account2, account3, account4];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -63,9 +63,11 @@ const inputClosePin = document.querySelector('.form__input--pin');
 
 let movements = account1.movements;
 
-function displayMovements(movements) {
+function displayMovements(movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach(function (mov, i) {
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `
     <div class="movements__row">
@@ -126,31 +128,6 @@ function calcDisplayBalance(acc) {
   labelBalance.textContent = `$${acc.balance}`;
 }
 
-const deposits = movements.filter((mov) => {
-  return mov > 0;
-});
-
-const withdrawals = movements.filter((mov) => {
-  return mov < 0;
-});
-
-const balance = movements.reduce((total, num) => {
-  return total + num;
-});
-
-// Maximum value
-const max = movements.reduce((largestNum, num) => {
-  if (largestNum > num) {
-    largestNum = largestNum;
-  } else {
-    largestNum = num;
-  }
-  return largestNum;
-});
-
-let firstWithdrawal = movements.find((mov) => mov < 0);
-console.log(firstWithdrawal);
-
 const account = accounts.find((acc) => acc.owner === 'Jessica Davis');
 console.log(account);
 
@@ -179,7 +156,6 @@ btnLogin.addEventListener('click', function (e) {
 });
 
 // TransferEvent Handler
-
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -187,6 +163,8 @@ btnTransfer.addEventListener('click', function (e) {
   const receiverAcc = accounts.find(
     (acc) => acc.username === inputTransferTo.value
   );
+
+  inputTransferAmount.value = inputTransferTo.value = '';
 
   if (
     amount > 0 &&
@@ -198,4 +176,54 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movements.push(amount);
     updateIU(currentAccount);
   }
+});
+
+// Loan Ammout
+btnLoan.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
+    currentAccount.movements.push(amount);
+    //update UI
+    updateIU(currentAccount);
+  }
+  inputLoanAmount.value = '';
+});
+
+// Delete Account
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  if (
+    currentAccount.username == inputCloseUsername.value &&
+    currentAccount.pin == Number(inputClosePin.value)
+  ) {
+    let index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+
+    //Delete UI
+    accounts.splice(index, 1);
+
+    // Hide UI
+    containerApp.style.opacity = 0;
+    labelWelcome.textContent = `Log in to get started`;
+  } else {
+    console.log('false');
+  }
+  inputCloseUsername.value = inputTransferTo.value = '';
+});
+
+//Btn Sort
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted
 });
