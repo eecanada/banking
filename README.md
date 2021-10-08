@@ -21,5 +21,15 @@
 
 [Click to view page](https://bank-ist.netlify.app/)
 
+- Use username: jd and pin: 2222 to login 
+- User is able to request loan a loan of 10% based on their current balance.
+- There are a total of three accounts built in the bank app, and those three accounts can send money to each other, but they cannot transfer money to their own account.
+- Users are able to delete their account if their username and pin match when they submit the information on the delete form.
+- User can sort the order of there deposits.
+
+
+# Next Steps
+* Build a timer functions, so after 5 minutes have elapsed, the user is automatically logged out
+
 
 
