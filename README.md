@@ -29,7 +29,7 @@
 
 
 # Next Steps
-* Build a timer functions, so after 5 minutes have elapsed, the user is automatically logged out
+* Build a timer function, so after 5 minutes have elapsed, the user is automatically logged out
 
 
 
